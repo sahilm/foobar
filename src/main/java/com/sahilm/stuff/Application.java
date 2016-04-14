@@ -11,10 +11,8 @@ class Application {
         AbstractApplicationContext ctx =
                 new ClassPathXmlApplicationContext("context.xml");
 
-        final Producer bean = ctx.getBean(Producer.class);
-        bean.keepProducing();
+        ctx.getBean(Consumer.class).keepConsuming();
+        ctx.getBean(Producer.class).keepProducing();
 
-        final Consumer consumer = ctx.getBean(Consumer.class);
-        consumer.keepConsuming();
     }
 }

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 
 class Consumer {
@@ -28,7 +29,6 @@ class Consumer {
         final Connection connection = connectionFactory.newConnection();
         final Channel channel = connection.createChannel();
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
         final com.rabbitmq.client.Consumer consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(final String consumerTag, final Envelope envelope, final AMQP.BasicProperties
@@ -37,6 +37,14 @@ class Consumer {
                 LOGGER.info(message);
             }
         };
-        channel.basicConsume(QUEUE_NAME, true, consumer);
+
+        Executors.newSingleThreadExecutor().submit(() -> {
+            try {
+                LOGGER.info("Waiting for messages. To exit press CTRL+C");
+                channel.basicConsume(QUEUE_NAME, true, consumer);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }
