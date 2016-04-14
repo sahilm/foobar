@@ -30,7 +30,7 @@ class Producer {
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
         final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         final AtomicInteger atomicInteger = new AtomicInteger(0);
-        LOGGER.info("Starting production in 500 ms...");
+        System.out.println("Starting production in 500 ms...");
         executorService.scheduleAtFixedRate(() -> {
             try {
                 channel.basicPublish("", QUEUE_NAME, null, atomicInteger.toString().getBytes(Charset.forName("UTF-8")));
@@ -38,6 +38,6 @@ class Producer {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }, 500L, 500L, TimeUnit.MILLISECONDS);
+        }, 500L, 500L, TimeUnit.MICROSECONDS);
     }
 }

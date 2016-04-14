@@ -34,13 +34,13 @@ class Consumer {
             public void handleDelivery(final String consumerTag, final Envelope envelope, final AMQP.BasicProperties
                     properties, final byte[] body) throws IOException {
                 String message = new String(body, UTF_8_CHARSET);
-                LOGGER.info(message);
+                System.out.println(message);
             }
         };
 
         Executors.newSingleThreadExecutor().submit(() -> {
             try {
-                LOGGER.info("Waiting for messages. To exit press CTRL+C");
+                System.out.println("Waiting for messages. To exit press CTRL+C");
                 channel.basicConsume(QUEUE_NAME, true, consumer);
             } catch (IOException e) {
                 throw new RuntimeException(e);
