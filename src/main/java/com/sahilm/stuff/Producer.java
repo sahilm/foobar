@@ -38,6 +38,6 @@ class Producer {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }, 500L, 500L, TimeUnit.MICROSECONDS);
+        }, 500L, 500L, TimeUnit.MILLISECONDS);
     }
 }
